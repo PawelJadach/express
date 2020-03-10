@@ -12,6 +12,8 @@ app.use('/user', (req, res, next) => {
 })
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.render('index')
@@ -39,6 +41,18 @@ app.get('/info', (req, res) => {
 
 app.get('/hello/:name', (req, res) => {
   res.render('hello', { name: req.params.name });
+});
+
+app.post('/contact/send-message', (req, res) => {
+  const { author, sender, title, message, img} = req.body;
+
+  if(author && sender && title && message && img) {
+    res.render('contact', { isSent: true, img: img });
+  }
+  else {
+    res.render('contact', { isError: true });
+  }
+
 });
 
 app.use((req, res) => {
